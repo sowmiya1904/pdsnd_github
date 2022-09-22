@@ -8,6 +8,9 @@ CITY_DATA = {
 	       'washington' : 'washington.csv'
          }
 
+months = ['january','february','march','april','may','june']
+days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
+
 def get_filters():
 	"""
 	Function to specify city, month and day to analyze
@@ -19,87 +22,52 @@ def get_filters():
     """
 	print('Hello! Let\'s explore some US bikeshare data!')
 	
-	while True:
-		try:
-			#User Input for City
-			city = input('Enter the name of the city for which you would like to see the data for? Chicago, New York or Washington\n').lower()
-			#If user entered invalid city it raises an exception
-			if (city.strip() != 'chicago') and (city.strip()!='new york') and (city.strip()!='washington'):
-				raise NameError
-			else:
-				break
-		except NameError:
-			print('\nUnfortunately, Data is not provided for the entered city. Please try again...\n')
-			continue
-
-	
-	while True:
-		try:
-			#User input to filter the data based on month or day or both 
-			choice = input('\nLet us know if you would like to filter the data by month, day, both or None\n').lower()
-			months = ['january','february','march','april','may','june']
-			days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
-
-			if choice == 'month':
-				while True:
-					try:
-						month = input('\nWhich month- January, February, March, April, May, June?\n')
-						if month.lower().strip() not in months:
-							raise NameError
-						day = 'all'
-					except NameError:
-						print('\nOops..!! Sorry We could not recognize what data you are referring to. Please try again...\n')
-						continue
-					else: 
-						break
-			elif choice == 'day':
-				while True:
-					try:
-						day = input('\nWhich day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday?\n')
-						if day.lower().strip() not in days:
-							raise NameError
-						month = 'all'
-					except NameError:
-						print('\nOops..!! Sorry We could not recognize what data you are referring to. Please try again...\n')
-						continue
-					else:
-						break
-			elif choice == 'both':
-				while True:
-					try:
-						month = input('\nWhich month- January, February, March, April, May, June?\n')
-						if month.lower().strip() not in months:
-							raise NameError
-						else:
-							break
-					except NameError:
-						print('\nOops..!! Sorry We could not recognize what data you are referring to. Please try again...\n')
-						continue
-				while True:
-					try:
-						day = input('\nWhich day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday?\n')
-						if day.lower().strip() not in days:
-							raise NameError
-					except NameError:
-						print('\nOops..!! Sorry We could not recognize what data you are referring to. Please try again...\n')
-						continue
-					else:
-						break
-			elif choice == 'none':
-				month = 'all'
-				day = 'all'
-			else:
-				raise NameError
-		except NameError:
-			print('\nOops..!! Sorry We could not recognize what data you are referring to. Please try again...\n')
-			continue
-		else:
-			break
+	#Get User Input for City and function to validate the user input
+	city = validate_input('Enter the name of the city for which you would like to see the data for? Chicago, New York or Washington\n','c')
+	#User input to filter the data based on month or day or both 
+	choice = validate_input('\nLet us know if you would like to filter the data by month, day, both or None\n','ch')
+	if choice == 'month':
+		month = validate_input('\nWhich month- January, February, March, April, May, June?\n','m')
+		day = 'all'
+	elif choice == 'day':
+		day = validate_input('\nWhich day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday?\n','d')
+		month = 'all'
+	elif choice == 'both':
+		month = validate_input('\nWhich month- January, February, March, April, May, June?\n','m')
+		day = validate_input('\nWhich day? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday?\n','d')
+	elif choice == 'none':
+		month = 'all'
+		day = 'all'
 	
 	print("\nPlease wait while the data is loading...\n")
 	print('-'*40)
 	return city.strip(), month.lower().strip(), day.lower().strip()
 
+def validate_input(user_input_in,input_type):
+
+	while True:
+		user_input = input(user_input_in).lower()
+		try:
+			if user_input in ['chicago','new york','washington'] and input_type == 'c':
+				break
+			elif user_input in ['month','day','both','none'] and input_type == 'ch':
+				break
+			elif user_input in months and input_type == 'm':
+				break
+			elif user_input in days and input_type == 'd':
+				break
+			else:
+				if input_type == 'c':
+					print('\nUnfortunately, Data is not provided for the entered city. Please try again...\n')
+				if input_type == 'ch':
+					print('\nOops..!! Sorry We could not recognize what data you are referring to. Please try again...\n')
+				if input_type == 'm':
+					print("\nInvalid input!! Please enter valid input...")
+				if input_type == 'd':
+					print("\nInvalid input!! Please enter valid input...")
+		except ValueError:
+			print('\nOops..!! Sorry We could not recognize what data you are referring to. Please try again...\n')
+	return user_input
 
 def load_data(city, month, day):
 	"""
