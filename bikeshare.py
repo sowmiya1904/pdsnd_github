@@ -8,6 +8,9 @@ CITY_DATA = {
 	       'washington' : 'washington.csv'
          }
 
+months = ['january','february','march','april','may','june']
+days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
+
 def get_filters():
 	"""
 	Function to specify city, month and day to analyze
@@ -37,8 +40,6 @@ def get_filters():
 		try:
 			#User input to filter the data based on month or day or both 
 			choice = input('\nLet us know if you would like to filter the data by month, day, both or None\n').lower()
-			months = ['january','february','march','april','may','june']
-			days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 
 			if choice == 'month':
 				while True:
